@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="containerProducts">
+		<div class="row">
+			<h1>Products</h1>
+		</div>
+		<div class="row">
+			<table class="table">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Price</th>
+				</tr>
+ 				
+				<tr th:each="product : ${products}" >
+					<td th:text="${product.productId}"></td>
+					<td th:text="${product.name}"></td>
+					<td th:text="${product.price}"></td>
+					<td>
+					<a th:href="@{'/products'(page=${products.number + 1},
+					                          pageBet=${bets.number + 1},
+					                          productId=${product.productId},
+					                          amount=0)}"><span>Add Bet</span></a>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="row">
+			<div th:if="${products.totalPages > 1}" class="form-group col-md-11 pagination-centered">
+				<table class="table">
+					<tr>
+						<th th:class="${products.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=1,pageBet=${bets.number + 1})}">&laquo;</a>
+						</th>
+						<th th:class="${products.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number},pageBet=${bets.number + 1})}">&larr;</a>
+						</th>
+						<th th:class="${products.number == (page - 1)} ? 'active pointer-disabled'"
+							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+							<a class="pageLink" th:href="@{/products(page=${page},pageBet=${bets.number + 1})}" th:text="${page}"></a>
+						</th>
+						<th th:class="${products.number + 1 == products.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 2},pageBet=${bets.number + 1})}">&rarr;</a>
+						</th>
+						<th th:class="${products.number + 1 == products.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.totalPages},pageBet=${bets.number + 1})}">&raquo;</a>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+</div>
+<div class="containerBets">
+		<div class="row">
+			<h1>Latest bets</h1>
+		</div>
+		<div class="row">
+			<table class="table">
+				<tr>
+					<th>Product</th>
+					<th>Amount</th>
+					<th>Timestamp</th>
+				</tr>
+ 				
+				<tr th:each="bet : ${bets}" >
+					<td th:text="${bet.product.name}"></td>
+					<td th:text="${bet.amount}"></td>
+					<td th:text="${bet.timestamp}"></td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="row">
+			<div th:if="${bets.totalPages > 1}" class="form-group col-md-11 pagination-centered">
+				<table class="table">
+					<tr>
+						<th th:class="${bets.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=1)}">&laquo;</a>
+						</th>
+						<th th:class="${bets.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.number})}">&larr;</a>
+						</th>
+						<th th:class="${bets.number == (page - 1)} ? 'active pointer-disabled'"
+							th:each="page : ${#numbers.sequence(pagerBet.startPage, pagerBet.endPage)}">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${pageBet})}" th:text="${page}"></a>
+						</th>
+						<th th:class="${bets.number + 1 == bets.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.number + 2})}">&rarr;</a>
+						</th>
+						<th th:class="${bets.number + 1 == bets.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.totalPages})}">&raquo;</a>
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+</div>
+<div th:if="${pId}" class="containerNewBet">
+		<div class="row">
+			<h1 th:text="'Existing Bets for product ' + ${bet.product.name}">Existing Bets</h1>
+		</div>
+		<div class="row">
+			<table class="table">
+				<tr>
+					<th>ID</th>
+					<th>Amount</th>
+					<th>Timestamp</th>
+				</tr>
+ 				
+				<tr th:each="b : ${betsByProjectId}" >
+					<td th:text="${b.betId}"></td>
+					<td th:text="${b.amount}"></td>
+					<td th:text="${b.timestamp}"></td>
+				</tr>
+
+			</table>
+		</div>
+		<div class="row">
+			<h1>New bet:</h1>
+			<form action="#" th:action="@{/newbet}" th:object="${bet}" method="post">
+		        <input type="hidden" th:field="*{product.productId}" />
+		        <p>Amount: <input id="bet_amount" type="text" th:field="*{amount}" oninput="amountChangeListener()" autofocus/></p>
+		        <p><input type="submit" value="Submit" />
+	    	</form>
+		</div>
+</div>
+	<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/app.js}"></script>
+
+	<script>
+
+		setTimeout(function () {
+				location.reload(true);
+				//reloadPage();
+			}, 
+			3000);
+
+		function getQueryVariable(variable) {
+		       var query = window.location.href;
+
+		       if (query.indexOf("?") != -1) {
+		    	   var parameters = query.split("?")[1];
+
+			       var vars = parameters.split("&");
+		    	   
+			       for (var i = 0; i < vars.length; i++) {
+		               var pair = vars[i].split("=");
+		               if (pair[0] == variable){return pair[1];}
+			       }
+		       } 
+		       
+		       return "";
+		}
+	
+		function reloadPage() {
+			var amountField = document.getElementById("bet_value");
+			var amountValue = '';
+			
+			if (amountField != null) {
+				amountValue = amountField.value;
+			}
+			
+			var productPage = getQueryVariable('page');
+			var betPage = getQueryVariable('pageBet');
+
+			if (productPage == "") {
+				productPage = 0; 
+			}
+			
+			if (betPage == "") {
+				betPage = 0; 
+			}
+			
+			alert("Product page: " + productPage + ", bet page: " + betPage + ", amount: " + amountValue);
+		}
+
+		function amountChangeListener() {
+			var page = getQueryVariable('page');
+			var pageBet = getQueryVariable('pageBet');
+			var productId = getQueryVariable('productId');
+			var amount = document.getElementById("bet_amount").value;
+
+			if (amount != null && amount != "") {
+				var newHref = window.location.href.split('?')[0]
+							+ '?page=' + page
+							+ '&pageBet=' + pageBet
+							+ '&productId=' + productId
+							+ '&amount=' + amount;
+	
+				window.location.href = newHref;
+			}
+		}
+	</script>
+</body>
+</html>
