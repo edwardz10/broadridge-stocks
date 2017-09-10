@@ -50,6 +50,7 @@ public class ProductController {
 	@RequestMapping(value="/products", method = RequestMethod.GET)
 	public ModelAndView products(@RequestParam("page") Optional<Integer> page,
 								 @RequestParam("pageBet") Optional<Integer> pageBet,
+								 @RequestParam("pageNewBet") Optional<Integer> pageNewBet,
 								 @RequestParam("productId") Optional<Long> productId,
 								 @RequestParam("amount") Optional<Integer> amount) {
 		ModelAndView modelAndView = new ModelAndView("products");
@@ -78,11 +79,14 @@ public class ProductController {
 			newBet.setProduct(selectedProduct);
 			newBet.setAmount(am);
 			
-			Page<Bet> betsByProjectId = betService.getBetsByProductId(pId, new PageRequest(evalPage, productsPerPage));
+			int evalPageNewBet = (pageNewBet.orElse(0) < 1) ? INITIAL_PAGE : pageNewBet.get() - 1;
+			Page<Bet> betsByProjectId = betService.getBetsByProductId(pId, new PageRequest(evalPageNewBet, productsPerPage));
+			Pager pagerNewBet = new Pager(betsByProjectId.getTotalPages(), betsByProjectId.getNumber(), BUTTONS_TO_SHOW);
 			modelAndView.addObject("pId", pId);
 			modelAndView.addObject("bet", newBet);
 			modelAndView.addObject("betsByProjectId", betsByProjectId);
 			modelAndView.addObject("amount", am);
+			modelAndView.addObject("pagerNewBet", pagerNewBet);
 		}
 		
 		modelAndView.addObject("products", products);

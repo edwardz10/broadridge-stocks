@@ -37,20 +37,25 @@
 				<table class="table">
 					<tr>
 						<th th:class="${products.number == 0} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=1,pageBet=${bets.number + 1})}">&laquo;</a>
+							<a class="pageLink" th:href="@{/products(page=1,
+							                                         pageBet=${bets.number + 1})}">&laquo;</a>
 						</th>
 						<th th:class="${products.number == 0} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number},pageBet=${bets.number + 1})}">&larr;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number},
+							                                         pageBet=${bets.number + 1})}">&larr;</a>
 						</th>
 						<th th:class="${products.number == (page - 1)} ? 'active pointer-disabled'"
 							th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-							<a class="pageLink" th:href="@{/products(page=${page},pageBet=${bets.number + 1})}" th:text="${page}"></a>
+							<a class="pageLink" th:href="@{/products(page=${page},
+							                                         pageBet=${bets.number + 1})}" th:text="${page}"></a>
 						</th>
 						<th th:class="${products.number + 1 == products.totalPages} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 2},pageBet=${bets.number + 1})}">&rarr;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 2},
+							                                         pageBet=${bets.number + 1})}">&rarr;</a>
 						</th>
 						<th th:class="${products.number + 1 == products.totalPages} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.totalPages},pageBet=${bets.number + 1})}">&raquo;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.totalPages},
+							                                         pageBet=${bets.number + 1})}">&raquo;</a>
 						</th>
 					</tr>
 				</table>
@@ -82,20 +87,25 @@
 				<table class="table">
 					<tr>
 						<th th:class="${bets.number == 0} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=1)}">&laquo;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=1)}">&laquo;</a>
 						</th>
 						<th th:class="${bets.number == 0} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.number})}">&larr;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number})}">&larr;</a>
 						</th>
 						<th th:class="${bets.number == (page - 1)} ? 'active pointer-disabled'"
 							th:each="page : ${#numbers.sequence(pagerBet.startPage, pagerBet.endPage)}">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${pageBet})}" th:text="${page}"></a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${page})}" th:text="${page}"></a>
 						</th>
 						<th th:class="${bets.number + 1 == bets.totalPages} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.number + 2})}">&rarr;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 2})}">&rarr;</a>
 						</th>
 						<th th:class="${bets.number + 1 == bets.totalPages} ? disabled">
-							<a class="pageLink" th:href="@{/products(page=${products.number + 1},pageBet=${bets.totalPages})}">&raquo;</a>
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.totalPages})}">&raquo;</a>
 						</th>
 					</tr>
 				</table>
@@ -121,6 +131,50 @@
 				</tr>
 
 			</table>
+		</div>
+		<div class="row">
+			<div th:if="${betsByProjectId.totalPages > 1}" class="form-group col-md-11 pagination-centered">
+				<table class="table">
+					<tr>
+						<th th:class="${betsByProjectId.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 1},
+							                                         pageNewBet=1,
+							                                         productId=${bet.product.productId},
+							                                         amount=${amount})}">&laquo;</a>
+						</th>
+						<th th:class="${betsByProjectId.number == 0} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 1},
+							                                         pageNewBet=${betsByProjectId.number},
+							                                         productId=${bet.product.productId},
+							                                         amount=${amount})}">&larr;</a>
+						</th>
+						<th th:class="${betsByProjectId.number == (page - 1)} ? 'active pointer-disabled'"
+							th:each="page : ${#numbers.sequence(pagerNewBet.startPage, pagerNewBet.endPage)}">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 1},
+							                                         pageNewBet=${page},
+							                                         productId=${bet.product.productId},
+							                                         amount=${amount})}" th:text="${page}"></a>
+						</th>
+						<th th:class="${betsByProjectId.number + 1 == bets.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 1},
+							                                         pageNewBet=${betsByProjectId.number + 2},
+							                                         productId=${bet.product.productId},
+							                                         amount=${amount})}">&rarr;</a>
+						</th>
+						<th th:class="${betsByProjectId.number + 1 == betsByProjectId.totalPages} ? disabled">
+							<a class="pageLink" th:href="@{/products(page=${products.number + 1},
+							                                         pageBet=${bets.number + 1},
+							                                         pageNewBet=${betsByProjectId.totalPages},
+							                                         productId=${bet.product.productId},
+							                                         amount=${amount})}">&raquo;</a>
+						</th>
+					</tr>
+				</table>
+			</div>
 		</div>
 		<div class="row">
 			<h1>New bet:</h1>
@@ -185,6 +239,7 @@
 		function amountChangeListener() {
 			var page = getQueryVariable('page');
 			var pageBet = getQueryVariable('pageBet');
+			var pageNewBet = getQueryVariable('pageNewBet');
 			var productId = getQueryVariable('productId');
 			var amount = document.getElementById("bet_amount").value;
 
@@ -192,6 +247,7 @@
 				var newHref = window.location.href.split('?')[0]
 							+ '?page=' + page
 							+ '&pageBet=' + pageBet
+							+ '&pageNewBet=' + pageNewBet
 							+ '&productId=' + productId
 							+ '&amount=' + amount;
 	
