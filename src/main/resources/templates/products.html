@@ -180,7 +180,9 @@
 			<h1>New bet:</h1>
 			<form action="#" th:action="@{/newbet}" th:object="${bet}" method="post">
 		        <input type="hidden" th:field="*{product.productId}" />
-		        <p>Amount: <input id="bet_amount" type="text" th:field="*{amount}" oninput="amountChangeListener()" autofocus/></p>
+		        <p>Amount: <input id="bet_amount"
+		        				 type="number" min="1" max="1000" step="10"
+		        				  th:field="*{amount}" oninput="amountChangeListener()" autofocus/></p>
 		        <p><input type="submit" value="Submit" />
 	    	</form>
 		</div>
@@ -193,7 +195,6 @@
 
 		setTimeout(function () {
 				location.reload(true);
-				//reloadPage();
 			}, 
 			3000);
 
@@ -214,28 +215,6 @@
 		       return "";
 		}
 	
-		function reloadPage() {
-			var amountField = document.getElementById("bet_value");
-			var amountValue = '';
-			
-			if (amountField != null) {
-				amountValue = amountField.value;
-			}
-			
-			var productPage = getQueryVariable('page');
-			var betPage = getQueryVariable('pageBet');
-
-			if (productPage == "") {
-				productPage = 0; 
-			}
-			
-			if (betPage == "") {
-				betPage = 0; 
-			}
-			
-			alert("Product page: " + productPage + ", bet page: " + betPage + ", amount: " + amountValue);
-		}
-
 		function amountChangeListener() {
 			var page = getQueryVariable('page');
 			var pageBet = getQueryVariable('pageBet');
@@ -244,14 +223,18 @@
 			var amount = document.getElementById("bet_amount").value;
 
 			if (amount != null && amount != "") {
-				var newHref = window.location.href.split('?')[0]
-							+ '?page=' + page
-							+ '&pageBet=' + pageBet
-							+ '&pageNewBet=' + pageNewBet
-							+ '&productId=' + productId
-							+ '&amount=' + amount;
-	
-				window.location.href = newHref;
+				var amountInt = parseInt(amount);
+				
+				if (amountInt <= 1000) {
+					var newHref = window.location.href.split('?')[0]
+								+ '?page=' + page
+								+ '&pageBet=' + pageBet
+								+ '&pageNewBet=' + pageNewBet
+								+ '&productId=' + productId
+								+ '&amount=' + amount;
+		
+					window.location.href = newHref;
+				}
 			}
 		}
 	</script>
