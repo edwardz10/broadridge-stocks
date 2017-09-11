@@ -181,7 +181,7 @@
 			<form action="#" th:action="@{/newbet}" th:object="${bet}" method="post">
 		        <input type="hidden" th:field="*{product.productId}" />
 		        <p>Amount: <input id="bet_amount"
-		        				 type="number" min="1" max="1000" step="10"
+		        				 type="number" min="1" max="1000" step="1"
 		        				  th:field="*{amount}" oninput="amountChangeListener()" autofocus/></p>
 		        <p><input type="submit" value="Submit" />
 	    	</form>
